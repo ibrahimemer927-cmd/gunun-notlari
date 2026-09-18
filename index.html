@@ -30,7 +30,6 @@
       padding: 24px 16px 48px;
       color: var(--text);
       position: relative;
-      /* Orijinal Fotoğraf - Sıfır Filtre, Sıfır Opaklık Kaybı */
       background-image: url('arkaplan.jpg');
       background-size: cover;
       background-position: center center;
@@ -44,22 +43,22 @@
       max-width: 420px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       position: relative;
       z-index: 1;
     }
 
-    /* Günün Sözü Kartı */
-    .quote-card {
+    .glass-card {
       background: rgba(255, 255, 255, 0.90);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1.5px solid rgba(255, 255, 255, 0.95);
-      border-radius: 22px;
-      padding: 18px 20px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      border-radius: 20px;
+      padding: 16px 18px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
     }
-    .quote-badge {
+
+    .badge {
       display: inline-block;
       background: rgba(255, 222, 231, 0.95);
       color: var(--primary-dark);
@@ -71,14 +70,101 @@
       margin-bottom: 8px;
       text-transform: uppercase;
     }
+
     .quote-text {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 600;
-      line-height: 1.55;
+      line-height: 1.5;
       color: #271f25;
     }
 
-    /* Başlık ve Tarih */
+    .song-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .song-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .song-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .song-disc {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #ff758f, #ff477e);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(255, 71, 126, 0.35);
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    .song-details .title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #271f25;
+    }
+    .song-details .artist {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .song-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .listen-btn {
+      background: #1db954;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 3px 8px rgba(29, 185, 84, 0.3);
+      transition: transform 0.1s;
+    }
+    .listen-btn:active {
+      transform: scale(0.95);
+    }
+    .new-song-btn {
+      background: rgba(255, 222, 231, 0.9);
+      border: none;
+      color: var(--primary-dark);
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: transform 0.1s;
+    }
+    .new-song-btn:active {
+      transform: scale(0.92);
+    }
+
     .header {
       display: flex;
       justify-content: space-between;
@@ -86,7 +172,7 @@
       margin-top: 4px;
     }
     .header h2 {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 700;
       color: #ffffff;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
@@ -104,7 +190,6 @@
       outline: none;
     }
 
-    /* Giriş Kutusu */
     .input-box {
       display: flex;
       gap: 8px;
@@ -139,7 +224,6 @@
       transform: scale(0.94);
     }
 
-    /* Plan Listesi */
     .todo-list {
       list-style: none;
       display: flex;
@@ -195,11 +279,11 @@
     .todo-item.done .checkbox svg {
       display: block;
     }
-    .todo-item.done .title {
+    .todo-item.done .task-title {
       text-decoration: line-through;
       color: var(--text-muted);
     }
-    .title {
+    .task-title {
       font-size: 14.5px;
       font-weight: 500;
       color: #271f25;
@@ -229,9 +313,28 @@
 </head>
 <body>
   <div class="container">
-    <div class="quote-card">
-      <div class="quote-badge">Günün Tebessümü 🌸</div>
+    <div class="glass-card">
+      <div class="badge">Günün Tebessümü 🌸</div>
       <div id="quoteText" class="quote-text">...</div>
+    </div>
+
+    <div class="glass-card song-card">
+      <div class="song-header">
+        <div class="badge">Günün Şarkısı 🎵</div>
+        <button class="new-song-btn" onclick="getRandomSong()" title="Başka şarkı öner">🔄</button>
+      </div>
+      <div class="song-content">
+        <div class="song-info">
+          <div class="song-disc">🎶</div>
+          <div class="song-details">
+            <div id="songTitle" class="title">Şarkı Yükleniyor...</div>
+            <div id="songArtist" class="artist">Sanatçı</div>
+          </div>
+        </div>
+        <div class="song-actions">
+          <a id="songLink" class="listen-btn" href="#" target="_blank" rel="noopener noreferrer">Dinle ▶</a>
+        </div>
+      </div>
     </div>
 
     <div class="header">
@@ -356,6 +459,35 @@
       "Bugün de harika bir hikaye yazacaksın, tadını çıkar!"
     ];
 
+    const songs = [
+      { title: "Ay Tenli Kadın", artist: "Ufuk Beydemir", query: "Ufuk Beydemir Ay Tenli Kadın" },
+      { title: "Toprak Yağmura", artist: "Can Ozan", query: "Can Ozan Toprak Yağmura" },
+      { title: "Diğer Yarım", artist: "Ate", query: "Ate Diğer Yarım" },
+      { title: "Sen Benim Şarkılarımsın", artist: "Cem Adrian", query: "Cem Adrian Sen Benim Şarkılarımsın" },
+      { title: "Ben Seni Çok Sevdim", artist: "Cem Adrian", query: "Cem Adrian Ben Seni Çok Sevdim" },
+      { title: "Gel Be Gökyüzüm", artist: "İlyas Yalçıntaş", query: "İlyas Yalçıntaş Gel Be Gökyüzüm" },
+      { title: "Shawty", artist: "Shawty", query: "Shawty Kabul Olan Tek Duamsın" },
+      { title: "Böyle Sever", artist: "Kahraman Deniz", query: "Kahraman Deniz Böyle Sever" },
+      { title: "Seni Kendime Sakladım", artist: "Duman", query: "Duman Seni Kendime Sakladım" },
+      { title: "Gözleri Aşka Gülen", artist: "Zeki Müren", query: "Zeki Müren Gözleri Aşka Gülen" },
+      { title: "Bir Beyaz Orkide", artist: "Cihan Mürtezaoğlu", query: "Cihan Mürtezaoğlu Bir Beyaz Orkide" },
+      { title: "Benimle Uçar mısın?", artist: "Yalın", query: "Yalın Benimle Uçar mısın" },
+      { title: "Sarı Sonbahar", artist: "Pinhani", query: "Pinhani Sarı Sonbahar" },
+      { title: "Until I Found You", artist: "Stephen Sanchez", query: "Stephen Sanchez Until I Found You" },
+      { title: "Golden Hour", artist: "JVKE", query: "JVKE Golden Hour" },
+      { title: "Yellow", artist: "Coldplay", query: "Coldplay Yellow" },
+      { title: "Sparks", artist: "Coldplay", query: "Coldplay Sparks" }
+    ];
+
+    function getRandomSong() {
+      const randomSong = songs[Math.floor(Math.random() * songs.length)];
+      document.getElementById("songTitle").innerText = randomSong.title;
+      document.getElementById("songArtist").innerText = randomSong.artist;
+      document.getElementById("songLink").href = `https://open.spotify.com/search/${encodeURIComponent(randomSong.query)}`;
+    }
+
+    getRandomSong();
+
     document.getElementById("quoteText").innerText = 
       compliments[Math.floor(Math.random() * compliments.length)];
 
@@ -391,7 +523,7 @@
               <div class="checkbox">
                 <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
               </div>
-              <span class="title">${task.text}</span>
+              <span class="task-title">${task.text}</span>
             </div>
             <button class="delete-btn" onclick="deleteTask(${index})">✕</button>
           `;
