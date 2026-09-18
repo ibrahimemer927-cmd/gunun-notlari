@@ -27,7 +27,7 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding: 24px 16px 48px;
+      padding: 20px 16px 40px;
       color: var(--text);
       position: relative;
       background-image: url('arkaplan.jpg');
@@ -48,8 +48,9 @@
       z-index: 1;
     }
 
+    /* Kartlar */
     .glass-card {
-      background: rgba(255, 255, 255, 0.90);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1.5px solid rgba(255, 255, 255, 0.95);
@@ -78,10 +79,11 @@
       color: #271f25;
     }
 
+    /* Şarkı Kartı */
     .song-card {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
     .song-header {
       display: flex;
@@ -92,79 +94,87 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
+      background: rgba(255, 240, 245, 0.7);
+      padding: 10px 14px;
+      border-radius: 14px;
     }
     .song-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      overflow: hidden;
     }
     .song-disc {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       background: linear-gradient(135deg, #ff758f, #ff477e);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 18px;
-      box-shadow: 0 4px 10px rgba(255, 71, 126, 0.35);
+      font-size: 16px;
+      flex-shrink: 0;
       animation: spin 8s linear infinite;
     }
     @keyframes spin {
       100% { transform: rotate(360deg); }
     }
+    .song-details {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
     .song-details .title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #271f25;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     .song-details .artist {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 500;
       color: var(--text-muted);
     }
     .song-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-shrink: 0;
     }
     .listen-btn {
       background: #1db954;
-      color: white;
+      color: #ffffff !important;
       text-decoration: none;
       font-size: 12px;
       font-weight: 700;
-      padding: 7px 12px;
+      padding: 8px 12px;
       border-radius: 12px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
-      box-shadow: 0 3px 8px rgba(29, 185, 84, 0.3);
-      transition: transform 0.1s;
-    }
-    .listen-btn:active {
-      transform: scale(0.95);
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(29, 185, 84, 0.35);
+      cursor: pointer;
     }
     .new-song-btn {
-      background: rgba(255, 222, 231, 0.9);
-      border: none;
+      background: #ffffff;
+      border: 1px solid #ffd1dc;
       color: var(--primary-dark);
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: 15px;
-      transition: transform 0.1s;
-    }
-    .new-song-btn:active {
-      transform: scale(0.92);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
+    /* Başlık ve Tarih */
     .header {
       display: flex;
       justify-content: space-between;
@@ -190,6 +200,7 @@
       outline: none;
     }
 
+    /* Görev Ekleme */
     .input-box {
       display: flex;
       gap: 8px;
@@ -224,6 +235,7 @@
       transform: scale(0.94);
     }
 
+    /* Plan Listesi */
     .todo-list {
       list-style: none;
       display: flex;
@@ -313,15 +325,17 @@
 </head>
 <body>
   <div class="container">
+    <!-- Günün Sözü Kartı -->
     <div class="glass-card">
       <div class="badge">Günün Tebessümü 🌸</div>
       <div id="quoteText" class="quote-text">...</div>
     </div>
 
+    <!-- Şarkı Öneri Kartı -->
     <div class="glass-card song-card">
       <div class="song-header">
         <div class="badge">Günün Şarkısı 🎵</div>
-        <button class="new-song-btn" onclick="getRandomSong()" title="Başka şarkı öner">🔄</button>
+        <button type="button" class="new-song-btn" onclick="getRandomSong()" title="Başka şarkı öner">🔄</button>
       </div>
       <div class="song-content">
         <div class="song-info">
@@ -346,7 +360,7 @@
 
     <div class="input-box">
       <input type="text" id="taskInput" placeholder="Neler planlıyorsun? ✍️" />
-      <button id="addBtn">+</button>
+      <button type="button" id="addBtn">+</button>
     </div>
 
     <ul id="todoList" class="todo-list"></ul>
@@ -525,7 +539,7 @@
               </div>
               <span class="task-title">${task.text}</span>
             </div>
-            <button class="delete-btn" onclick="deleteTask(${index})">✕</button>
+            <button type="button" class="delete-btn" onclick="deleteTask(${index})">✕</button>
           `;
           listElement.appendChild(li);
         });
