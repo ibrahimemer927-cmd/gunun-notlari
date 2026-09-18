@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Günün Notları ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fff5f7;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --primary: #ff758f;
+      --primary-dark: #e65c78;
+      --accent: #ffb3c1;
+      --text: #4a4e69;
+      --text-muted: #9a8c98;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: linear-gradient(180deg, #ffe5ec 0%, #fff0f3 50%, #f8edeb 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px 40px;
+      color: var(--text);
+    }
+    .container {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .quote-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(255, 117, 143, 0.12);
+    }
+    .quote-badge {
+      display: inline-block;
+      background: #ffe3e8;
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    .quote-text {
+      font-size: 14.5px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #3d3442;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #22223b;
+    }
+    .date-picker-wrap input {
+      border: none;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      outline: none;
+    }
+    .input-box {
+      display: flex;
+      gap: 8px;
+    }
+    .input-box input {
+      flex: 1;
+      border: none;
+      background: white;
+      padding: 13px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      color: var(--text);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      outline: none;
+    }
+    .input-box button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 0 18px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(255, 117, 143, 0.3);
+      transition: transform 0.1s;
+    }
+    .input-box button:active {
+      transform: scale(0.95);
+    }
+    .todo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .todo-item {
+      background: white;
+      border-radius: 16px;
+      padding: 13px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.02);
+    }
+    .todo-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      cursor: pointer;
+    }
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .todo-item.done .checkbox {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .checkbox svg {
+      display: none;
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: white;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .todo-item.done .checkbox svg {
+      display: block;
+    }
+    .todo-item.done .title {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+    .title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      word-break: break-word;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #e5989b;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px 6px;
+    }
+    .empty-state {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="quote-card">
+      <div class="quote-badge">Günün Tebessümü 🌸</div>
+      <div id="quoteText" class="quote-text">...</div>
+    </div>
+    <div class="header">
+      <h2>Planlar</h2>
+      <div class="date-picker-wrap">
+        <input type="date" id="dateSelector" />
+      </div>
+    </div>
+    <div class="input-box">
+      <input type="text" id="taskInput" placeholder="Neler planlıyorsun? ✍️" />
+      <button id="addBtn">+</button>
+    </div>
+    <ul id="todoList" class="todo-list"></ul>
+    <div id="emptyState" class="empty-state" style="display: none;">
+      Bu güne ait bir plan görünmüyor ✨
+    </div>
+  </div>
+  <script>
+    const compliments = [
+      "Bugün de harika işler başaracaksın, sana inanıyorum! 🌟",
+      "Gülüşün tüm günü güzelleştirmeye yeter. ✨",
+      "Dünyayı senin gözlerinden görmek her şeyi daha anlamlı kılıyor.",
+      "İçindeki pozitif enerji etrafındaki herkese iyi geliyor.",
+      "Bugün kendine biraz daha nazik davranmayı unutma. 🌸",
+      "En zor anlarda bile içindeki ışıltıyı koruyorsun.",
+      "Aklına koyduğun her şeyi başarabilecek güce sahipsin.",
+      "Seninle geçen her an sıradan bir günü bile özelleştiriyor.",
+      "Bugün aynaya baktığında ne kadar eşsiz biri olduğunu hatırla.",
+      "Küçük adımlar da büyük hayallere ulaştırır, acele etme. 🤍",
+      "Gözlerindeki o ışıltı hiç sönmesin.",
+      "Zarafetin ve samimiyetin her tavrına yansıyor.",
+      "Dünyaya kattığın renk ve enerji çok güzel.",
+      "Bugün senin günün olsun, ışıl ışıl parla! 💫",
+      "Senin varlığın hayatı çok daha keyifli kılıyor.",
+      "Yorulduğunda derin bir nefes al ve dinlen, sen çok kıymetlisin.",
+      "Her yeni gün senin enerjinle daha aydınlık.",
+      "Kendine inan; başardığın her şey senin emeğin.",
+      "Sesini duymak günün en huzurlu anı.",
+      "Bugün de harikasın, bunu sakın unutma!",
+      "Her şey yoluna girecek, adımlarına güven. 🌿",
+      "Seninleyken zamanın nasıl aktığını unutuyorum.",
+      "Düşüncelerin ve zekan her zaman hayranlık uyandırıcı.",
+      "Bugün karşına çıkacak tüm zorlukları rahatlıkla aşacaksın.",
+      "Kalbinin güzelliği yüzüne yansıyor. 🌷",
+      "Sadece kendin olman bile etrafına ilham veriyor.",
+      "Ne kadar yorulsan da o tatlı tebessümün hiç solmasın.",
+      "Bugün kendine bir kahve ısmarla ve biraz mola ver. ☕",
+      "Sen her şeyin en güzelini hak ediyorsun.",
+      "Seninle konuşmak günün tüm yorgunluğunu unutturuyor.",
+      "Hayallerinin peşinden gitmekten asla vazgeçme.",
+      "İçindeki güç tahmin ettiğinden çok daha büyük.",
+      "Günün harika geçsin, şans hep seninle olsun! 🍀",
+      "Detaylara verdiğin özen seni bambaşka biri yapıyor.",
+      "Gözlerin her baktığı yere neşe taşıyor.",
+      "Bugün birine gülümsemek istersen ilk aynaya gülümse. 😊",
+      "Yıldızlar kadar parlak bir günün olsun.",
+      "Her adımında arkanda kocaman bir destek var.",
+      "Zihninin pırıltısı hayran bırakıyor.",
+      "Kendi mucizeni yaratacak güç tam olarak kalbinde.",
+      "Bugün hayatına güzellikler aksın.",
+      "Sıradan bir anı bile maceraya dönüştürmeyi başarıyorsun.",
+      "Sakinliğin ve duruşun insana huzur veriyor.",
+      "Tüm hedeflerine adım adım yaklaşıyorsun.",
+      "Günün enerjisi senin kadar parlak olsun! ☀️",
+      "Neşeli bir kahkahan tüm dertleri unutturabilir.",
+      "İyi ki varsın, iyi ki hayatımdasın. 💖",
+      "Bugün senin yeteneklerinin parlayacağı bir gün.",
+      "Kendine olan inancını hiç kaybetme, her şey harika olacak.",
+      "Senin olduğun her yer daha renkli ve sıcak.",
+      "Bugünü kendi hızında ve huzurla yaşa.",
+      "Güzelliğin kelimelerin ötesinde. 🌺",
+      "Yolun açık, kalbin ferah olsun bugün.",
+      "En ufak bir dokunuşun bile her şeyi toparlamaya yetiyor.",
+      "Kendine biraz zaman ayırmayı ve şımartmayı ihmal etme.",
+      "Yüreğin kadar aydınlık bir gün seni bekliyor.",
+      "Sen başarmak istedikten sonra imkansız diye bir şey yok.",
+      "Enerjinle etrafını aydınlatmaya devam et.",
+      "Günün her saati sana huzur ve mutluluk getirsin.",
+      "Düşündüğünden çok daha cesur ve yeteneklisin.",
+      "Senin dünyanda yer almak harika bir duygu.",
+      "Bugün küçük sürprizlerle dolu güzel bir gün olsun! 🎁",
+      "Hayat senin sevginle çok daha anlamlı.",
+      "Gözlerindeki heyecan hiçbir zaman eksilmesin.",
+      "Her zorluk, senin ne kadar güçlü olduğunu hatırlatmak için var.",
+      "Tebessümün bu günün en güzel başlangıcı.",
+      "Bugün aklından geçen tüm güzellikler gerçekleşsin.",
+      "Sen her gün biraz daha çiçek açıyorsun. 🌼",
+      "İyi kalpliliğin dünyaya verilmiş en güzel hediye.",
+      "Seninle paylaşılan her sohbet çok değerli.",
+      "Bugün hedeflerini tam on ikiden vuracaksın!",
+      "İçindeki umut her zaman yolunu aydınlatsın.",
+      "Zarafetin her detayda kendini belli ediyor.",
+      "Bugün bol bol dinlenmeyi ve su içmeyi unutma. 💧",
+      "Günün harika geçmesi için bir neden ara: Aynaya bak!",
+      "Seninle konuşurken zaman duruyor sanki.",
+      "Başarılarınla gurur duyuyorum, hep parlamaya devam et.",
+      "Kalbindeki merhamet seni paha biçilmez kılıyor.",
+      "Bugün hayat sana en güzel kapılarını açsın.",
+      "Gülüşün gökyüzündeki gökkuşağı gibi.",
+      "Senin gücün fırtınaları bile dindirir.",
+      "Her yeni sabah seninle anlam kazanıyor.",
+      "Bugün kendine bolca şefkat göster. 🤍",
+      "Bütün yorgunlukların uçup gideceği harika bir gün olsun.",
+      "Hayata kattığın o tatlı enerjiyi kimse taklit edemez.",
+      "Kendine hedefler koyarken sınır tanıma.",
+      "Işığın hiçbir bulutun ardında gizlenemez.",
+      "Bugün gülümsemek için onlarca sebebin olacak.",
+      "Gözlerinin derinliğinde huzur var.",
+      "Bugün de her gün olduğu gibi çok değerlisin.",
+      "Senin başaramayacağın hiçbir şey yok, adım atman yeterli.",
+      "Yürüyüşün, gülüşün, duruşun... Her şeyinle çok özelsin.",
+      "Yeni bir güne enerjinle hayat ver! 🌈",
+      "Kendine inanmaktan vazgeçmediğin sürece kazanırsın.",
+      "Seni düşünmek bile yüzümde tebessüm oluşturuyor.",
+      "Bugün tüm şans melekleri yanında olsun.",
+      "Günün her anı sana mutluluk taşısın.",
+      "Sen hayatın en zarif detayısın.",
+      "Aklına koyduğun her şey senin ellerinde çiçek açar. 🌸",
+      "Bugün de harika bir hikaye yazacaksın, tadını çıkar!"
+    ];
+
+    document.getElementById("quoteText").innerText = 
+      compliments[Math.floor(Math.random() * compliments.length)];
+
+    const dateSelector = document.getElementById("dateSelector");
+    dateSelector.value = new Date().toISOString().split("T")[0];
+
+    function getTasks() {
+      return JSON.parse(localStorage.getItem("afra_plans") || "{}");
+    }
+
+    function saveTasks(tasks) {
+      localStorage.setItem("afra_plans", JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      const selectedDate = dateSelector.value;
+      const allTasks = getTasks();
+      const currentList = allTasks[selectedDate] || [];
+      const listElement = document.getElementById("todoList");
+      const emptyState = document.getElementById("emptyState");
+
+      listElement.innerHTML = "";
+
+      if (currentList.length === 0) {
+        emptyState.style.display = "block";
+      } else {
+        emptyState.style.display = "none";
+        currentList.forEach((task, index) => {
+          const li = document.createElement("li");
+          li.className = `todo-item ${task.done ? "done" : ""}`;
+          li.innerHTML = `
+            <div class="todo-left" onclick="toggleTask(${index})">
+              <div class="checkbox">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <span class="title">${task.text}</span>
+            </div>
+            <button class="delete-btn" onclick="deleteTask(${index})">✕</button>
+          `;
+          listElement.appendChild(li);
+        });
+      }
+    }
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const selectedDate = dateSelector.value;
+      const allTasks = getTasks();
+      if (!allTasks[selectedDate]) allTasks[selectedDate] = [];
+
+      allTasks[selectedDate].push({ text, done: false });
+      saveTasks(allTasks);
+      input.value = "";
+      renderTasks();
+    }
+
+    window.toggleTask = function(index) {
+      const selectedDate = dateSelector.value;
+      const allTasks = getTasks();
+      allTasks[selectedDate][index].done = !allTasks[selectedDate][index].done;
+      saveTasks(allTasks);
+      renderTasks();
+    };
+
+    window.deleteTask = function(index) {
+      const selectedDate = dateSelector.value;
+      const allTasks = getTasks();
+      allTasks[selectedDate].splice(index, 1);
+      saveTasks(allTasks);
+      renderTasks();
+    };
+
+    document.getElementById("addBtn").addEventListener("click", addTask);
+    document.getElementById("taskInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    dateSelector.addEventListener("change", renderTasks);
+
+    renderTasks();
+  </script>
+</body>
+</html>
